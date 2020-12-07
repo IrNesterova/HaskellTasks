@@ -5,7 +5,9 @@ module Part3 where
 --
 -- Проверить, является ли число N простым (1 <= N <= 10^9)
 prob18 :: Integer -> Bool
-prob18 = error "Implement me!"
+prob18 1 = True
+prob18 n = all check [2..n `div` 2]
+            where check x = n `mod` x /= 0
 
 ------------------------------------------------------------
 -- PROBLEM #19
@@ -22,24 +24,40 @@ prob19 = error "Implement me!"
 -- Проверить, является ли число N совершенным (1<=N<=10^10)
 -- Совершенное число равно сумме своих делителей (меньших
 -- самого числа)
+divList'' :: Int -> Int -> [Int]
+divList'' n k | (k > (n `div` 2)) = []
+             | (n `mod` k) == 0 = k : divList'' n (k+1)
+             | otherwise =  divList'' n (k+1)
+
+divList :: Int -> [Int]
+divList n = divList'' n 1
 prob20 :: Integer -> Bool
-prob20 = error "Implement me!"
+prob20 n = (n == (foldl (+) 0 (prob21 n)))
 
 ------------------------------------------------------------
 -- PROBLEM #21
 --
 -- Вернуть список всех делителей числа N (1<=N<=10^10) в
 -- порядке возрастания
+divList' :: Integer -> Integer -> [Integer]
+divList' n k | (k > (n `div` 2)) = [n]
+             | (n `mod` k) == 0 = k : divList' n (k+1)
+             | otherwise =  divList' n (k+1)
+
 prob21 :: Integer -> [Integer]
-prob21 = error "Implement me!"
+prob21 n = divList' n 1
 
 ------------------------------------------------------------
 -- PROBLEM #22
 --
 -- Подсчитать произведение количеств букв i в словах из
 -- заданной строки (списка символов)
+count :: Char -> String -> Integer
+count x [] = 0
+count x (c:cs) | x == c = 1 + count x cs
+               | otherwise = count x cs
 prob22 :: String -> Integer
-prob22 = error "Implement me!"
+prob22 n = count 'i' n + count 'I' n
 
 ------------------------------------------------------------
 -- PROBLEM #23
@@ -59,7 +77,12 @@ prob23 = error "Implement me!"
 -- представить как сумму чисел от 1 до какого-то K
 -- (1 <= N <= 10^10)
 prob24 :: Integer -> Bool
-prob24 = error "Implement me!"
+prob24 = error "help"
+--  let nval = -0.5 + sqrt (1 + 8 * n) 'div' 2
+--  if (nval - round(nval) == 0.0)
+--        then true
+--  else false
+
 
 ------------------------------------------------------------
 -- PROBLEM #25
@@ -67,7 +90,12 @@ prob24 = error "Implement me!"
 -- Проверить, что запись числа является палиндромом (т.е.
 -- читается одинаково слева направо и справа налево)
 prob25 :: Integer -> Bool
-prob25 = error "Implement me!"
+prob25 x = reversal x == x
+reversal :: Integral a => a-> a
+reversal = go 0
+  where go a 0 = a
+        go a b = let (q,r) = b `quotRem` 10 in go (a*10 + r) q
+
 
 ------------------------------------------------------------
 -- PROBLEM #26
@@ -75,8 +103,11 @@ prob25 = error "Implement me!"
 -- Проверить, что два переданных числа - дружественные, т.е.
 -- сумма делителей одного (без учёта самого числа) равна
 -- другому, и наоборот
+divisors :: Integer -> [Integer]
+divisors d = filter ((== 0) . (mod d)) [1..d]
 prob26 :: Integer -> Integer -> Bool
-prob26 = error "Implement me!"
+prob26 n k = if foldr (+) 0 (divisors n) == foldr (+) 0 (divisors k) then True
+                                                             else False
 
 ------------------------------------------------------------
 -- PROBLEM #27
@@ -101,8 +132,7 @@ prob28 = error "Implement me!"
 -- Найти наибольшее число-палиндром, которое является
 -- произведением двух K-значных (1 <= K <= 3)
 prob29 :: Int -> Int
-prob29 k = error "Implement me!"
-
+prob29 n = let pal n = (let s = show n in s == reverse s) in maximum [k | i <- [1..3], j <- [i..3], let k = i * j, pal k]
 ------------------------------------------------------------
 -- PROBLEM #30
 --

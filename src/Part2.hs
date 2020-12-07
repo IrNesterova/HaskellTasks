@@ -8,7 +8,9 @@ import Part2.Types
 -- Написать функцию, которая преобразует значение типа
 -- ColorLetter в символ, равный первой букве значения
 prob6 :: ColorLetter -> Char
-prob6 = error "Implement me!"
+prob6 RED = 'R'
+prob6 BLUE = 'B'
+prob6 GREEN = 'G'
 
 ------------------------------------------------------------
 -- PROBLEM #7
@@ -16,8 +18,7 @@ prob6 = error "Implement me!"
 -- Написать функцию, которая проверяет, что значения
 -- находятся в диапазоне от 0 до 255 (границы входят)
 prob7 :: ColorPart -> Bool
-prob7 = error "Implement me!"
-
+prob7 = error "help me"
 ------------------------------------------------------------
 -- PROBLEM #8
 --
@@ -32,7 +33,7 @@ prob8 = error "Implement me!"
 -- Написать функцию, которая возвращает значение из
 -- ColorPart
 prob9 :: ColorPart -> Int
-prob9 = error "Implement me!"
+prob9 = error "help"
 
 ------------------------------------------------------------
 -- PROBLEM #10
@@ -47,7 +48,8 @@ prob10 = error "Implement me!"
 --
 -- Найти сумму элементов дерева
 prob11 :: Num a => Tree a -> a
-prob11 = error "Implement me!"
+prob11 = error "help"
+
 
 ------------------------------------------------------------
 -- PROBLEM #12

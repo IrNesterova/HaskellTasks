@@ -15,7 +15,8 @@ module Part1
 --
 -- На вход функции подаются неотрицательные числа
 prob1 :: Int -> Int
-prob1 x = error "Implement me!"
+prob1 x = (x*3 + 123)  `mod` 65537
+
 
 
 ------------------------------------------------------------
@@ -25,7 +26,9 @@ prob1 x = error "Implement me!"
 -- * нечётные числа увеличивает втрое и добавляет единицу
 -- * чётные числа делит на два
 prob2 :: Integer -> Integer
-prob2 n = error "Implement me!"
+prob2 n = if n `mod` 2 == 0
+            then n `div` 2
+          else n * 3 + 1
 
 
 ------------------------------------------------------------
@@ -50,9 +53,8 @@ prob2 n = error "Implement me!"
 --
 -- Для любой функции step и n == 1 ответом будет 0.
 prob3 :: (Integer -> Integer) -> Integer -> Integer
-prob3 step n = error "Implement me!"
-
-
+prob3 step 1 = 0
+prob3 step n = step n
 ------------------------------------------------------------
 -- PROBLEM #4
 --
@@ -68,9 +70,10 @@ prob3 step n = error "Implement me!"
 --
 -- Число n по модулю не превосходит 10^5
 prob4 :: Integer -> Integer
-prob4 n = error "Implement me!"
-
-
+prob4 0 = 1
+prob4 1 = 1
+prob4 n = if (n<0) then prob4 (n+2) - prob4 (n+1)
+                   else prob4 (n-1) + prob4 (n-2)
 ------------------------------------------------------------
 -- PROBLEM #5
 --
@@ -79,5 +82,12 @@ prob4 n = error "Implement me!"
 --
 -- Числа n и k положительны и не превосходят 10^8.
 -- Число 1 не считается простым числом
+
+--логика такова, если у нас максимальное число k - очевидно, что все простые аргументы меньше k
+--divisors просто делители
+divisors :: Integer -> [Integer]
+divisors d = filter ((==0) . rem d) [2 .. d `div` 2]
 prob5 :: Integer -> Integer -> Bool
-prob5 = error "Implement me!"
+prob5 n k =
+      if maximum (divisors n ++ [k]) == k then False
+                                         else True
