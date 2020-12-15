@@ -1,0 +1,2 @@
+# HaskellTasks
+tasks haskell
