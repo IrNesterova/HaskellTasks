@@ -1,3 +1,4 @@
+{-# LANGUAGE InstanceSigs #-}
 module Part4 where
 
 -- | 8 tasks:
@@ -32,6 +33,8 @@ instance Applicative Parser where
 -- Написать экземпляр класса Alternative для Parser
 -- (удовлетворяющий законам)
 instance Alternative Parser where
+
+
 ------------------------------------------------------------
 -- PROBLEM #36
 --

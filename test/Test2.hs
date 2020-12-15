@@ -51,7 +51,7 @@ test9 = testGroup "P09"
 test10 :: TestTree
 test10 = testGroup "P10"
   [ testCase "prob10 (100,50,0) == Just (R 100)" $
-    prob10 (Color 100 50 0) @?= Just (Red 100)
+      prob10 (Color 100 50 0) @?= Just (Red 100)
   , testCase "prob10 (100,100,100) == Nothing" $
     prob10 (Color 100 100 100) @?= Nothing
   ]

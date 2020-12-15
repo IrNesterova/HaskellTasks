@@ -52,9 +52,13 @@ prob2 n = if n `mod` 2 == 0
 --    3 -> 10 -> 5 -> 16 -> 8 -> 4 -> 2 -> 1
 --
 -- Для любой функции step и n == 1 ответом будет 0.
+-- Не сделано, тут короче надо что-то вызвать по нормальному
+helper3 step n acc | step n == 1 = acc+1
+                   | otherwise   = helper3 step (step n) (acc+1)
+
 prob3 :: (Integer -> Integer) -> Integer -> Integer
 prob3 step 1 = 0
-prob3 step n = step n
+prob3 step n = helper3 step n 0
 ------------------------------------------------------------
 -- PROBLEM #4
 --
@@ -85,9 +89,13 @@ prob4 n = if (n<0) then prob4 (n+2) - prob4 (n+1)
 
 --логика такова, если у нас максимальное число k - очевидно, что все простые аргументы меньше k
 --divisors просто делители
-divisors :: Integer -> [Integer]
-divisors d = filter ((==0) . rem d) [2 .. d `div` 2]
+sieve :: [Integer] -> [Integer]
+sieve [] = []
+sieve (x:xs) = x : (sieve $ filter (\ y -> (y `mod` x) /= 0) xs )
+
+factorize :: Integer -> [Integer]
+factorize n = filter (\ x -> (n `mod` x)==0) $ sieve [2,3..n `div` 2]
+
 prob5 :: Integer -> Integer -> Bool
-prob5 n k =
-      if maximum (divisors n ++ [k]) == k then False
-                                         else True
+prob5 n k = if maximum(factorize n ++ [k]) == k && length (filter (/=k) (factorize n ++ [k])) /= 0 then True
+                                                                                                   else False

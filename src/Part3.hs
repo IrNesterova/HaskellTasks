@@ -5,7 +5,7 @@ module Part3 where
 --
 -- Проверить, является ли число N простым (1 <= N <= 10^9)
 prob18 :: Integer -> Bool
-prob18 1 = True
+prob18 1 = False
 prob18 n = all check [2..n `div` 2]
             where check x = n `mod` x /= 0
 
@@ -15,8 +15,20 @@ prob18 n = all check [2..n `div` 2]
 -- Вернуть список всех простых делителей и их степеней в
 -- разложении числа N (1 <= N <= 10^9). Простые делители
 -- должны быть расположены по возрастанию
+sieve :: [Integer] -> [Integer]
+sieve [] = []
+sieve (x:xs) = x : (sieve $ filter (\ y -> (y `mod` x) /= 0) xs )
+
+factorize :: Integer -> [Integer]
+factorize n = filter (\ x -> (n `mod` x)==0) $ sieve [2,3..n `div` 2]
+
+getPow :: Integer -> Integer -> Integer -> Int
+getPow n f ff | (n `mod` ff) /= 0 = 0
+           | otherwise = 1 + getPow n  f (f *ff)
+
 prob19 :: Integer -> [(Integer, Int)]
-prob19 = error "Implement me!"
+prob19 1 = []
+prob19 n = if (map (\ f -> (f, getPow n f f)) $ factorize n) == [] then [(n, 1)] else map (\ f -> (f, getPow n f f)) $ factorize n
 
 ------------------------------------------------------------
 -- PROBLEM #20
@@ -24,15 +36,15 @@ prob19 = error "Implement me!"
 -- Проверить, является ли число N совершенным (1<=N<=10^10)
 -- Совершенное число равно сумме своих делителей (меньших
 -- самого числа)
-divList'' :: Int -> Int -> [Int]
+divList'' :: Integer -> Integer -> [Integer]
 divList'' n k | (k > (n `div` 2)) = []
              | (n `mod` k) == 0 = k : divList'' n (k+1)
              | otherwise =  divList'' n (k+1)
 
-divList :: Int -> [Int]
+divList :: Integer -> [Integer]
 divList n = divList'' n 1
 prob20 :: Integer -> Bool
-prob20 n = (n == (foldl (+) 0 (prob21 n)))
+prob20 n = (n == (foldl (+) 0 (divList n)))
 
 ------------------------------------------------------------
 -- PROBLEM #21
@@ -52,12 +64,9 @@ prob21 n = divList' n 1
 --
 -- Подсчитать произведение количеств букв i в словах из
 -- заданной строки (списка символов)
-count :: Char -> String -> Integer
-count x [] = 0
-count x (c:cs) | x == c = 1 + count x cs
-               | otherwise = count x cs
+
 prob22 :: String -> Integer
-prob22 n = count 'i' n + count 'I' n
+prob22 n = foldl1 (*) (map toInteger (map (length) (map (filter (=='i'))(words n))))
 
 ------------------------------------------------------------
 -- PROBLEM #23
@@ -76,14 +85,16 @@ prob23 = error "Implement me!"
 -- Проверить, что число N - треугольное, т.е. его можно
 -- представить как сумму чисел от 1 до какого-то K
 -- (1 <= N <= 10^10)
+
+--число является треугольным, если представляет из себя идеальный квадрат
+--идиотская проверка, если честно
+triangular :: Integer -> Float
+triangular x = sqrt((8.0*(fromInteger x)) + 1)
+
 prob24 :: Integer -> Bool
-prob24 = error "help"
---  let nval = -0.5 + sqrt (1 + 8 * n) 'div' 2
---  if (nval - round(nval) == 0.0)
---        then true
---  else false
-
-
+prob24 1 = True
+prob24 n = if (round(triangular n))^2 == 8*n + 1 then True
+                                                 else False
 ------------------------------------------------------------
 -- PROBLEM #25
 --
@@ -107,15 +118,19 @@ divisors :: Integer -> [Integer]
 divisors d = filter ((== 0) . (mod d)) [1..d]
 prob26 :: Integer -> Integer -> Bool
 prob26 n k = if foldr (+) 0 (divisors n) == foldr (+) 0 (divisors k) then True
-                                                             else False
+                                                                   else False
 
 ------------------------------------------------------------
 -- PROBLEM #27
 --
 -- Найти в списке два числа, сумма которых равна заданному.
 -- Длина списка не превосходит 500
-prob27 :: Int -> [Int] -> Maybe (Int, Int)
+prob27 :: Int -> [Int] -> Maybe(Int, Int)
 prob27 = error "Implement me!"
+--sumAll x = [a+b | (a,i) <- p, (b,j) <- p , i /= j]
+--                       where p=zip x [1..]
+--prob27 n k = if length (filter (==n) (sumAll k)) > 0 then
+--                                                     else Nothing
 
 ------------------------------------------------------------
 -- PROBLEM #28
