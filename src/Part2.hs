@@ -18,9 +18,9 @@ prob6 GREEN = 'G'
 -- Написать функцию, которая проверяет, что значения
 -- находятся в диапазоне от 0 до 255 (границы входят)
 prob7 :: ColorPart -> Bool
-prob7 (Red a) = if (a < 255) && (a > 0) then True else False
-prob7 (Blue a) = if (a < 255) && (a > 0) then True else False
-prob7 (Green a) = if (a < 255) && (a > 0) then True else False
+prob7 (Red a) = if (a =< 255) && (a >= 0) then True else False
+prob7 (Blue a) = if (a =< 255) && (a >= 0) then True else False
+prob7 (Green a) = if (a =< 255) && (a >= 0) then True else False
 
 ------------------------------------------------------------
 -- PROBLEM #8
@@ -50,7 +50,7 @@ prob9 (Green a) = a
 prob10 :: Color -> Maybe ColorPart
 prob10 (Color x y z) | x > y && x > z = Just (Red x)
                      | y > x && y > z = Just (Green x)
-                     | z > y && z > y = Just (Blue x)
+                     | z > y && z > x = Just (Blue x)
                      | otherwise      = Nothing
 
 ------------------------------------------------------------
