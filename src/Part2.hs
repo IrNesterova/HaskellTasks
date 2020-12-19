@@ -83,7 +83,7 @@ prob12 (Tree l m r) | isJust l && isJust r       = if (getRoot (fromJust l)) < m
 -- На вход подаётся значение и дерево поиска. Вернуть то
 -- поддерево, в корне которого находится значение, если оно
 -- есть в дереве поиска; если его нет - вернуть Nothing
-getRoot (Tree l m r) = m
+
 getLeft  (Tree l m r) = l
 getRight (Tree l m r) = r
 
@@ -110,16 +110,14 @@ prob14 = error "Implement me!"
 -- Выполнить вращение дерева влево относительно корня
 -- (https://en.wikipedia.org/wiki/Tree_rotation)
 prob15 :: Tree a -> Tree a
-prob15 (Tree (Just (Tree  lm )) m (Just (Tree rl rm rr))) = Tree (Just (Tree (Just (Tree Nothing lm Nothing )) m rl)) rm rr
-
+prob15 = error"help"
 ------------------------------------------------------------
 -- PROBLEM #16
 --
 -- Выполнить вращение дерева вправо относительно корня
 -- (https://en.wikipedia.org/wiki/Tree_rotation)
 prob16 :: Tree a -> Tree a
-prob16 (Tree (Just (Tree ll lm lr)) m (Just (Tree  rm ))) = Tree ll lm (Just (Tree lr m (Just (Tree Nothing rm Nothing))))
-
+prob16 = error "help"
 ------------------------------------------------------------
 -- PROBLEM #17
 --
@@ -127,4 +125,4 @@ prob16 (Tree (Just (Tree ll lm lr)) m (Just (Tree  rm ))) = Tree ll lm (Just (Tr
 -- разница высот поддеревьев не превосходила по модулю 1
 -- (например, преобразовать в полное бинарное дерево)
 prob17 :: Tree a -> Tree a
-prob17 = error "Implement me!"
+prob17 = error "help"
