@@ -18,9 +18,9 @@ prob6 GREEN = 'G'
 -- Написать функцию, которая проверяет, что значения
 -- находятся в диапазоне от 0 до 255 (границы входят)
 prob7 :: ColorPart -> Bool
-prob7 (Red a) = if (a =< 255) && (a >= 0) then True else False
-prob7 (Blue a) = if (a =< 255) && (a >= 0) then True else False
-prob7 (Green a) = if (a =< 255) && (a >= 0) then True else False
+prob7 (Red a) = if (a <= 255) && (a >= 0) then True else False
+prob7 (Blue a) = if (a <= 255) && (a >= 0) then True else False
+prob7 (Green a) = if (a <= 255) && (a >= 0) then True else False
 
 ------------------------------------------------------------
 -- PROBLEM #8
