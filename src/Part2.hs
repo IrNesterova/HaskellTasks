@@ -2,6 +2,7 @@ module Part2 where
 
 import Part2.Types
 import Data.Maybe
+import Data.Function ((&))
 ------------------------------------------------------------
 -- PROBLEM #6
 --
@@ -102,7 +103,16 @@ prob13 x tree | getRoot tree == x = Just tree
 -- Заменить () на числа в порядке обхода "правый, левый,
 -- корень", начиная с 1
 prob14 :: Tree () -> Tree Int
-prob14 = error "Implement me!"
+prob14 t = case enumerate (Just t) 1 of
+    (Just enumerated, _) -> enumerated
+
+enumerate :: Maybe (Tree ()) -> Int -> (Maybe (Tree Int), Int)
+enumerate Nothing i = (Nothing, i)
+enumerate (Just (Tree l () r)) i = (Just $ Tree l' current r', current + 1)
+    where
+        (r', afterRight) = enumerate r i
+        (l', afterLeft) = enumerate l afterRight
+        current = afterLeft
 
 ------------------------------------------------------------
 -- PROBLEM #15
@@ -117,13 +127,16 @@ prob15 (Tree (Just (Tree ll lm lr )) m (Just (Tree rl rm rr))) = Tree (Just (Tre
 -- Выполнить вращение дерева вправо относительно корня
 -- (https://en.wikipedia.org/wiki/Tree_rotation)
 prob16 :: Tree a -> Tree a
-prob16 (Tree (Just (Tree ll lm lr)) m (Just (Tree rl rm rr))) = Tree ll lm (Just (Tree lr m (Just (Tree Nothing rm Nothing))))
+prob16 tree = maybe tree rightRotation $ tree & left
+    where
+        rightRotation leftSubTree = leftSubTree { right = Just oldRoot }
+            where
+                oldRoot = tree { left = leftSubTree & right }
 ------------------------------------------------------------
 -- PROBLEM #17
 --
 -- Сбалансировать дерево поиска так, чтобы для любого узла
 -- разница высот поддеревьев не превосходила по модулю 1
 -- (например, преобразовать в полное бинарное дерево)
-
 prob17 :: Tree a -> Tree a
 prob17 = error "help"

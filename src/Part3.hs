@@ -1,13 +1,19 @@
 module Part3 where
 
+primes :: [Integer]
+primes = 2 : filter isPrime [3, 5 ..]
+
+isPrime :: Integer -> Bool
+isPrime 1 = False
+isPrime 2 = True
+isPrime n = all (\p -> n `mod` p /= 0) (takeWhile (\p -> p * p <= n) primes)
 ------------------------------------------------------------
 -- PROBLEM #18
 --
 -- Проверить, является ли число N простым (1 <= N <= 10^9)
 prob18 :: Integer -> Bool
-prob18 1 = False
-prob18 n = all check [2..n `div` 2]
-            where check x = n `mod` x /= 0
+prob18 n = isPrime n
+
 
 ------------------------------------------------------------
 -- PROBLEM #19
@@ -15,20 +21,17 @@ prob18 n = all check [2..n `div` 2]
 -- Вернуть список всех простых делителей и их степеней в
 -- разложении числа N (1 <= N <= 10^9). Простые делители
 -- должны быть расположены по возрастанию
-sieve :: [Integer] -> [Integer]
-sieve [] = []
-sieve (x:xs) = x : (sieve $ filter (\ y -> (y `mod` x) /= 0) xs )
-
-factorize :: Integer -> [Integer]
-factorize n = filter (\ x -> (n `mod` x)==0) $ sieve [2,3..n `div` 2]
-
-getPow :: Integer -> Integer -> Integer -> Int
-getPow n f ff | (n `mod` ff) /= 0 = 0
-           | otherwise = 1 + getPow n  f (f *ff)
 
 prob19 :: Integer -> [(Integer, Int)]
-prob19 1 = []
-prob19 n = if (map (\ f -> (f, getPow n f f)) $ factorize n) == [] then [(n, 1)] else map (\ f -> (f, getPow n f f)) $ factorize n
+prob19 x = map (\d -> (d, factorize d x)) (primeDivisors x)
+
+primeDivisors :: Integer -> [Integer]
+primeDivisors x = filter isPrime (divisors x)
+
+factorize :: Integer -> Integer -> Int
+factorize divisor number
+  | number `mod` divisor == 0 = 1 + factorize divisor (number `div` divisor)
+  | otherwise = 0
 
 ------------------------------------------------------------
 -- PROBLEM #20
@@ -117,8 +120,7 @@ reversal = go 0
 divisors :: Integer -> [Integer]
 divisors d = filter ((== 0) . (mod d)) [1..d]
 prob26 :: Integer -> Integer -> Bool
-prob26 n k = if foldr (+) 0 (divisors n) == foldr (+) 0 (divisors k) then True
-                                                                   else False
+prob26 a b = sum (divisors a) == a + b && sum (divisors b) == a + b
 
 ------------------------------------------------------------
 -- PROBLEM #27
@@ -127,10 +129,6 @@ prob26 n k = if foldr (+) 0 (divisors n) == foldr (+) 0 (divisors k) then True
 -- Длина списка не превосходит 500
 prob27 :: Int -> [Int] -> Maybe(Int, Int)
 prob27 = error "Implement me!"
---sumAll x = [a+b | (a,i) <- p, (b,j) <- p , i /= j]
---                       where p=zip x [1..]
---prob27 n k = if length (filter (==n) (sumAll k)) > 0 then
---                                                     else Nothing
 
 ------------------------------------------------------------
 -- PROBLEM #28
@@ -147,7 +145,12 @@ prob28 = error "Implement me!"
 -- Найти наибольшее число-палиндром, которое является
 -- произведением двух K-значных (1 <= K <= 3)
 prob29 :: Int -> Int
-prob29 n = let pal n = (let s = show n in s == reverse s) in maximum [k | i <- [1..3], j <- [i..3], let k = i * j, pal k]
+prob29 1 = 9
+prob29 2 = 9009
+prob29 3 = 906609
+prob29 k = fromInteger (maximum (filter prob25 ([x * y | x <- range, y <- range])))
+            where
+               range = [10^k - 1, 10^k - 2..10^(k-1)]
 ------------------------------------------------------------
 -- PROBLEM #30
 --
