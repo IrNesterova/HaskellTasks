@@ -49,8 +49,8 @@ prob9 (Green a) = a
 -- которого наибольшее значение (если такой единственный)
 prob10 :: Color -> Maybe ColorPart
 prob10 (Color x y z) | x > y && x > z = Just (Red x)
-                     | y > x && y > z = Just (Green x)
-                     | z > y && z > x = Just (Blue x)
+                     | y > x && y > z = Just (Green y)
+                     | z > y && z > x = Just (Blue z)
                      | otherwise      = Nothing
 
 ------------------------------------------------------------

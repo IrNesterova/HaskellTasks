@@ -76,6 +76,7 @@ prob3 step n = helper3 step n 0
 prob4 :: Integer -> Integer
 prob4 0 = 1
 prob4 1 = 1
+prob4 (-1) = 0
 prob4 n = if (n<0) then prob4 (n+2) - prob4 (n+1)
                    else prob4 (n-1) + prob4 (n-2)
 ------------------------------------------------------------
@@ -89,13 +90,22 @@ prob4 n = if (n<0) then prob4 (n+2) - prob4 (n+1)
 
 --логика такова, если у нас максимальное число k - очевидно, что все простые аргументы меньше k
 --divisors просто делители
-sieve :: [Integer] -> [Integer]
-sieve [] = []
-sieve (x:xs) = x : (sieve $ filter (\ y -> (y `mod` x) /= 0) xs )
 
-factorize :: Integer -> [Integer]
-factorize n = filter (\ x -> (n `mod` x)==0) $ sieve [2,3..n `div` 2]
+isPrime :: Integer -> Bool
+primes :: [Integer]
+
+isPrime n | n < 2 = False
+isPrime n = all (\p -> n `mod` p /= 0) . takeWhile ((<= n) . (^ 2)) $ primes
+primes = 2 : filter isPrime [3..]
+
+primeFactors :: Integer -> [Integer]
+primeFactors n = iter n primes where
+    iter n (p:_) | n < p^2 = [n | n > 1]
+    iter n ps@(p:ps') =
+        let (d, r) = n `divMod` p
+        in if r == 0 then p : iter d ps else iter n ps'
 
 prob5 :: Integer -> Integer -> Bool
-prob5 n k = if maximum(factorize n ++ [k]) == k && length (filter (/=k) (factorize n ++ [k])) /= 0 then True
-                                                                                                   else False
+prob5 n k = if maximum(primeFactors n ++ [k]) == k && length (filter (/=k) (primeFactors n ++ [k])) /= 0 then True
+                                                                                                          else False
+                             
