@@ -20,13 +20,16 @@ import Control.Applicative
 --
 -- Написать экземпляр класса Functor для Parser
 -- (удовлетворяющий законам)
+
 instance Functor Parser where
+
 ------------------------------------------------------------
 -- PROBLEM #34
 --
 -- Написать экземпляр класса Applicative для Parser
 -- (удовлетворяющий законам)
 instance Applicative Parser where
+
 ------------------------------------------------------------
 -- PROBLEM #35
 --

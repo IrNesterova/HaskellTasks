@@ -110,19 +110,20 @@ prob14 = error "Implement me!"
 -- Выполнить вращение дерева влево относительно корня
 -- (https://en.wikipedia.org/wiki/Tree_rotation)
 prob15 :: Tree a -> Tree a
-prob15 = error"help"
+prob15 (Tree (Just (Tree ll lm lr )) m (Just (Tree rl rm rr))) = Tree (Just (Tree (Just (Tree Nothing lm Nothing )) m rl)) rm rr
 ------------------------------------------------------------
 -- PROBLEM #16
 --
 -- Выполнить вращение дерева вправо относительно корня
 -- (https://en.wikipedia.org/wiki/Tree_rotation)
 prob16 :: Tree a -> Tree a
-prob16 = error "help"
+prob16 (Tree (Just (Tree ll lm lr)) m (Just (Tree rl rm rr))) = Tree ll lm (Just (Tree lr m (Just (Tree Nothing rm Nothing))))
 ------------------------------------------------------------
 -- PROBLEM #17
 --
 -- Сбалансировать дерево поиска так, чтобы для любого узла
 -- разница высот поддеревьев не превосходила по модулю 1
 -- (например, преобразовать в полное бинарное дерево)
+
 prob17 :: Tree a -> Tree a
 prob17 = error "help"
