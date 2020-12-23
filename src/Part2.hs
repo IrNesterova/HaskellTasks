@@ -73,10 +73,19 @@ prob11 (Tree l m r) = m + (if isJust l then (prob11 $ fromJust l) else 0) + (if 
 -- в узле)
 getRoot (Tree l m r) = m
 prob12 :: Ord a => Tree a -> Bool
-prob12 (Tree l m r) | isJust l && isJust r       = if (getRoot (fromJust l)) < m && (getRoot (fromJust r)) > m then (prob12 (fromJust l) && prob12 (fromJust r)) else False
-                    | isJust l && isNothing r    = if (getRoot (fromJust l)) < m then prob12 (fromJust l) else False
-                    | isNothing l && isJust r    = if (getRoot (fromJust r)) > m then prob12 (fromJust r) else False
-                    | isNothing l && isNothing r = True
+prob12 = checkTree
+
+checkTree :: Ord a => Tree a -> Bool
+checkTree tree = checkLeft (left tree) (root tree) && checkRight (right tree) (root tree)
+
+checkRight :: Ord a => Maybe (Tree a) -> a -> Bool
+checkRight Nothing x = True
+checkRight (Just tree) parent = root tree >= parent && checkTree tree
+
+checkLeft :: Ord a => Maybe (Tree a) -> a -> Bool
+checkLeft Nothing x = True
+checkLeft (Just tree) parent = root tree < parent && checkTree tree
+
 
 ------------------------------------------------------------
 -- PROBLEM #13
@@ -120,7 +129,12 @@ enumerate (Just (Tree l () r)) i = (Just $ Tree l' current r', current + 1)
 -- Выполнить вращение дерева влево относительно корня
 -- (https://en.wikipedia.org/wiki/Tree_rotation)
 prob15 :: Tree a -> Tree a
-prob15 (Tree (Just (Tree ll lm lr )) m (Just (Tree rl rm rr))) = Tree (Just (Tree (Just (Tree Nothing lm Nothing )) m rl)) rm rr
+prob15 tree = maybe tree leftRotation $ tree & right
+    where
+        leftRotation rightSubTree = rightSubTree { left = Just oldRoot }
+            where
+                oldRoot = tree { right = rightSubTree & left }
+
 ------------------------------------------------------------
 -- PROBLEM #16
 --

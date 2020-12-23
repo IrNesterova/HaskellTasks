@@ -33,34 +33,26 @@ factorize divisor number
   | number `mod` divisor == 0 = 1 + factorize divisor (number `div` divisor)
   | otherwise = 0
 
+
 ------------------------------------------------------------
 -- PROBLEM #20
 --
 -- Проверить, является ли число N совершенным (1<=N<=10^10)
 -- Совершенное число равно сумме своих делителей (меньших
 -- самого числа)
-divList'' :: Integer -> Integer -> [Integer]
-divList'' n k | (k > (n `div` 2)) = []
-             | (n `mod` k) == 0 = k : divList'' n (k+1)
-             | otherwise =  divList'' n (k+1)
 
-divList :: Integer -> [Integer]
-divList n = divList'' n 1
 prob20 :: Integer -> Bool
-prob20 n = (n == (foldl (+) 0 (divList n)))
+prob20 n = 2 * n == sum (divisors n)
 
 ------------------------------------------------------------
 -- PROBLEM #21
 --
 -- Вернуть список всех делителей числа N (1<=N<=10^10) в
 -- порядке возрастания
-divList' :: Integer -> Integer -> [Integer]
-divList' n k | (k > (n `div` 2)) = [n]
-             | (n `mod` k) == 0 = k : divList' n (k+1)
-             | otherwise =  divList' n (k+1)
-
 prob21 :: Integer -> [Integer]
-prob21 n = divList' n 1
+prob21 n = divisors n
+
+
 
 ------------------------------------------------------------
 -- PROBLEM #22
@@ -128,7 +120,15 @@ prob26 a b = sum (divisors a) == a + b && sum (divisors b) == a + b
 -- Найти в списке два числа, сумма которых равна заданному.
 -- Длина списка не превосходит 500
 prob27 :: Int -> [Int] -> Maybe(Int, Int)
-prob27 = error "Implement me!"
+prob27 _ [] = Nothing
+prob27 sum (x:xs) = case findComplement sum x xs of
+    Nothing -> prob27 sum xs
+    (Just compl) -> Just (x, compl)
+  where
+    findComplement _ _ [] = Nothing
+    findComplement sum item (x:xs)
+      | item + x == sum = Just x
+      | otherwise = findComplement sum item xs
 
 ------------------------------------------------------------
 -- PROBLEM #28
@@ -157,7 +157,10 @@ prob29 k = fromInteger (maximum (filter prob25 ([x * y | x <- range, y <- range]
 -- Найти наименьшее треугольное число, у которого не меньше
 -- заданного количества делителей
 prob30 :: Int -> Integer
-prob30 = error "Implement me!"
+prob30 k = head (filter (\t -> length (divisors t) >= k) triangleNumbers)
+
+triangleNumbers :: [Integer]
+triangleNumbers = map (\n -> n * (n + 1) `div` 2) [0..]
 
 ------------------------------------------------------------
 -- PROBLEM #31
