@@ -51,6 +51,22 @@ prob20 n = 2 * n == sum (divisors n)
 -- порядке возрастания
 prob21 :: Integer -> [Integer]
 prob21 n = divisors n
+sqrt' :: Integral a => a -> a
+sqrt' x = round (sqrt (fromIntegral x))
+
+divisors :: Integer -> [Integer]
+divisors n = halfDivisors ++ allDivisors n halfDivisors []
+  where
+    halfDivisors = filter isDivisor [1..(sqrt' n)]
+    isDivisor candidate = n `mod` candidate == 0
+
+allDivisors :: Integer -> [Integer] -> [Integer] -> [Integer]
+allDivisors n [] acc = acc
+allDivisors n (x:xs) acc =
+  let a = (n `div` x)
+  in if a == x
+    then allDivisors n xs acc
+    else allDivisors n xs (a : acc)
 
 
 
@@ -109,8 +125,7 @@ reversal = go 0
 -- Проверить, что два переданных числа - дружественные, т.е.
 -- сумма делителей одного (без учёта самого числа) равна
 -- другому, и наоборот
-divisors :: Integer -> [Integer]
-divisors d = filter ((== 0) . (mod d)) [1..d]
+
 prob26 :: Integer -> Integer -> Bool
 prob26 a b = sum (divisors a) == a + b && sum (divisors b) == a + b
 
