@@ -110,6 +110,14 @@ primeFactors n = iter n primes where
         in if r == 0 then p : iter d ps else iter n ps'
 
 prob5 :: Integer -> Integer -> Bool
-prob5 n k = if maximum(primeFactors n ++ [k]) == k && length (filter (/=k) (primeFactors n ++ [k])) /= 0 then True
-                                                                                                          else False
-                             
+prob5 n k = all (< k) (getPrimeDivisors n)
+    where
+        getPrimeDivisors :: Integer -> [Integer]
+        getPrimeDivisors = getDivisorsWithCurrent 2
+
+        getDivisorsWithCurrent :: Integer -> Integer -> [Integer]
+        getDivisorsWithCurrent _ 1 = []
+        getDivisorsWithCurrent divisor number
+            | divisor * divisor > number = [number]
+            | number `mod` divisor == 0 = divisor : getDivisorsWithCurrent divisor (number `div` divisor)
+            | otherwise = getDivisorsWithCurrent (divisor + 1) number
